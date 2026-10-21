@@ -37,7 +37,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Styles -->
     <link rel="stylesheet" href="styles.css">
@@ -75,11 +75,23 @@
     </script>
 </head>
 <body>
+    <svg width="0" height="0" class="sprite" aria-hidden="true">
+        <symbol id="i-phone" viewBox="0 0 24 24"><path d="M6.6 3.5 9 3.2l1.6 4.2-2 1.5a12 12 0 0 0 6.5 6.5l1.5-2 4.2 1.6-.3 2.4a2 2 0 0 1-2 1.7A16.6 16.6 0 0 1 4.8 5.5a2 2 0 0 1 1.8-2Z"/></symbol>
+        <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></symbol>
+        <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+        <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+        <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 5 6v5.5c0 4.3 3 8 7 9.5 4-1.5 7-5.2 7-9.5V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></symbol>
+        <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="m11 12 8-8M16 7l2 2M14 9l2 2"/></symbol>
+        <symbol id="i-chat" viewBox="0 0 24 24"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4A8 8 0 1 1 20 12Z"/><path d="M8.5 12h.01M12 12h.01M15.5 12h.01"/></symbol>
+        <symbol id="i-car" viewBox="0 0 24 24"><path d="M5 16H3.5v-4l2-5h13l2 5v4H19"/><path d="M3.5 12h17"/><circle cx="7.5" cy="16.5" r="1.8"/><circle cx="16.5" cy="16.5" r="1.8"/><path d="M9.3 16.5h5.4"/></symbol>
+        <symbol id="i-taxi" viewBox="0 0 24 24"><path d="M5 17H3.5v-4l2-5h13l2 5v4H19"/><path d="M3.5 13h17"/><circle cx="7.5" cy="17.5" r="1.8"/><circle cx="16.5" cy="17.5" r="1.8"/><path d="M9.3 17.5h5.4M9.5 8l.5-3h4l.5 3"/></symbol>
+    </svg>
+
     <!-- Navigation -->
-    <nav class="nav" id="nav">
+    <nav class="nav" id="nav" aria-label="Main">
         <div class="container nav-container">
             <a href="#" class="logo" aria-label="Sigma Credit Hire, back to top">
-                <span class="logo-icon">Σ</span>
+                <span class="logo-icon" aria-hidden="true">Σ</span>
                 <span class="logo-text">
                     <span class="logo-sigma">SIGMA</span>
                     <span class="logo-credit">CREDIT HIRE LTD</span>
@@ -90,6 +102,9 @@
                 <li><a href="#services">Services</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
+            <a href="tel:+447516211991" class="btn btn-primary nav-call">
+                <svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>07516 211 991
+            </a>
             <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links">
                 <span></span>
                 <span></span>
@@ -101,134 +116,115 @@
     <!-- Hero Section -->
     <header class="hero" id="home">
         <div class="container hero-content">
-            <div class="hero-logo">Σ</div>
-            <h1>Accident Claims &<br>Replacement Vehicle Hire</h1>
+            <h1>Accident Claims &amp; Replacement Vehicle Hire</h1>
             <p class="hero-subtitle">Professional credit hire services for non-fault accidents. Serving Bolton, Manchester, and the surrounding areas.</p>
-            <a href="#contact" class="btn btn-primary">Get in Touch</a>
+            <div class="hero-actions">
+                <a href="tel:+447516211991" class="btn btn-primary btn-lg">
+                    <svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>Call 07516 211 991
+                </a>
+                <a href="#contact" class="btn btn-ghost btn-lg">Get in Touch</a>
+            </div>
+        </div>
+        <div class="container">
+            <ul class="promises">
+                <li><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg><span><strong>24/7</strong> support available</span></li>
+                <li><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg><span><strong>No fault,</strong> no cost</span></li>
+                <li><svg class="icon" aria-hidden="true"><use href="#i-key"/></svg><span><strong>Fast</strong> vehicle delivery</span></li>
+                <li><svg class="icon" aria-hidden="true"><use href="#i-chat"/></svg><span><strong>Free</strong> claims advice</span></li>
+            </ul>
         </div>
     </header>
 
-    <!-- About Section -->
-    <section class="section" id="about">
-        <div class="container">
-            <div class="section-header reveal">
+    <main>
+        <!-- About Section -->
+        <section class="section" id="about">
+            <div class="container about">
                 <h2>About Sigma Credit Hire</h2>
-                <div class="section-divider"></div>
+                <div class="about-content">
+                    <p class="about-lead">Sigma Credit Hire Ltd provides professional credit hire and accident management services across Bolton, Greater Manchester, and beyond. We specialise in providing like-for-like replacement vehicles to drivers who have been involved in non-fault accidents.</p>
+                    <p>Whether you need a standard vehicle, taxi, or specialist transport, we're here to keep you moving while your claim is processed.</p>
+                </div>
             </div>
-            <div class="about-content reveal">
-                <p>Sigma Credit Hire Ltd provides professional credit hire and accident management services across Bolton, Greater Manchester, and beyond. We specialise in providing like-for-like replacement vehicles to drivers who have been involved in non-fault accidents.</p>
-                <p>Whether you need a standard vehicle, taxi, or specialist transport, we're here to keep you moving while your claim is processed.</p>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Features Bar -->
-    <section class="features">
-        <div class="container">
-            <div class="features-grid">
-                <div class="feature-item reveal">
-                    <div class="feature-number">24/7</div>
-                    <div class="feature-label">Support Available</div>
-                </div>
-                <div class="feature-item reveal">
-                    <div class="feature-number">100%</div>
-                    <div class="feature-label">No Fault, No Cost</div>
-                </div>
-                <div class="feature-item reveal">
-                    <div class="feature-number">Fast</div>
-                    <div class="feature-label">Vehicle Delivery</div>
-                </div>
-                <div class="feature-item reveal">
-                    <div class="feature-number">Free</div>
-                    <div class="feature-label">Claims Advice</div>
+        <!-- Services Section -->
+        <section class="section section-alt" id="services">
+            <div class="container">
+                <h2 class="section-title">Our Services</h2>
+                <div class="services-grid">
+                    <article class="service">
+                        <svg class="service-icon" aria-hidden="true"><use href="#i-car"/></svg>
+                        <h3>Replacement Vehicles</h3>
+                        <p>Like-for-like replacement vehicles provided quickly and efficiently while your car is being repaired following a non-fault accident.</p>
+                    </article>
+                    <article class="service">
+                        <svg class="service-icon" aria-hidden="true"><use href="#i-taxi"/></svg>
+                        <h3>Taxi &amp; Private Hire</h3>
+                        <p>Specialist replacement vehicles for taxi drivers, including licensed hackney carriages and private hire vehicles.</p>
+                    </article>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Services Section -->
-    <section class="section section-alt" id="services">
-        <div class="container">
-            <div class="section-header reveal">
-                <h2>Our Services</h2>
-                <div class="section-divider"></div>
-            </div>
-            <div class="services-grid">
-                <div class="service-card reveal">
-                    <div class="service-icon">🚗</div>
-                    <h3>Replacement Vehicles</h3>
-                    <p>Like-for-like replacement vehicles provided quickly and efficiently while your car is being repaired following a non-fault accident.</p>
-                </div>
-                <div class="service-card reveal">
-                    <div class="service-icon">🚕</div>
-                    <h3>Taxi & Private Hire</h3>
-                    <p>Specialist replacement vehicles for taxi drivers, including licensed hackney carriages and private hire vehicles.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section class="section" id="contact">
-        <div class="container">
-            <div class="section-header reveal">
-                <h2>Contact Us</h2>
-                <div class="section-divider"></div>
-            </div>
-            <div class="contact-grid">
+        <!-- Contact Section -->
+        <section class="section" id="contact">
+            <div class="container contact-grid">
                 <div class="contact-info">
-                    <div class="contact-item reveal">
-                        <div class="contact-icon">📞</div>
-                        <div>
-                            <h4>Phone</h4>
-                            <p>
-                                <a href="tel:+447516211991">07516 211 991</a><br>
-                                <a href="tel:+447551541952">07551 541 952</a>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="contact-item reveal">
-                        <div class="contact-icon">✉️</div>
-                        <div>
-                            <h4>Email</h4>
-                            <p><a href="mailto:sigmahire1@gmail.com">sigmahire1@gmail.com</a></p>
-                        </div>
-                    </div>
-                    <div class="contact-item reveal">
-                        <div class="contact-icon contact-icon-alt">🏢</div>
-                        <div>
-                            <h4>Address</h4>
-                            <p>114 Crescent Road<br>Bolton, BL3 2JR</p>
-                            <p style="margin-top: 0.5rem; font-size: 0.9em; opacity: 0.8;">Company No. 16248954<br>VAT No. 488060664</p>
-                        </div>
-                    </div>
+                    <h2>Contact Us</h2>
+                    <ul class="contact-list">
+                        <li>
+                            <svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>
+                            <div>
+                                <h3>Phone</h3>
+                                <p class="contact-phones">
+                                    <a href="tel:+447516211991">07516 211 991</a>
+                                    <a href="tel:+447551541952">07551 541 952</a>
+                                </p>
+                            </div>
+                        </li>
+                        <li>
+                            <svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg>
+                            <div>
+                                <h3>Email</h3>
+                                <p><a href="mailto:sigmahire1@gmail.com">sigmahire1@gmail.com</a></p>
+                            </div>
+                        </li>
+                        <li>
+                            <svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg>
+                            <div>
+                                <h3>Address</h3>
+                                <p>114 Crescent Road, Bolton, BL3 2JR</p>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
-                <div class="contact-cta reveal">
+                <div class="contact-cta">
+                    <span class="contact-cta-mark" aria-hidden="true">Σ</span>
                     <h3>Been in an accident?</h3>
                     <p>If you've been involved in a non-fault accident, get in touch today. We'll guide you through the process and get you back on the road.</p>
-                    <a href="tel:+447516211991" class="btn btn-primary">Call Now</a>
+                    <a href="tel:+447516211991" class="btn btn-primary btn-lg">
+                        <svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>Call Now
+                    </a>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
     <!-- Footer -->
     <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <span class="footer-logo-icon">Σ</span>
-                    <span class="footer-logo-text">Sigma Credit Hire Ltd</span>
-                </div>
-                <div class="footer-details">
-                    <p>Company No. 16248954</p>
-                    <p>VAT No. 488060664</p>
-                    <p>114 Crescent Road, Bolton, BL3 2JR</p>
-                </div>
-                <p class="footer-copyright">&copy; 2026 Sigma Credit Hire Ltd. All rights reserved.</p>
+        <div class="container footer-content">
+            <div class="footer-logo">
+                <span class="footer-logo-icon" aria-hidden="true">Σ</span>
+                <span>Sigma Credit Hire Ltd</span>
             </div>
+            <p class="footer-details">Company No. 16248954 · VAT No. 488060664 · 114 Crescent Road, Bolton, BL3 2JR</p>
+            <p class="footer-copyright">&copy; 2026 Sigma Credit Hire Ltd. All rights reserved.</p>
         </div>
     </footer>
+
+    <a href="tel:+447516211991" class="call-bar">
+        <svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>Call 07516 211 991
+    </a>
 
     <script>
         // Mobile navigation toggle
@@ -249,21 +245,10 @@
             link.addEventListener('click', () => setMenu(false));
         });
 
-        // Navbar glassmorphism on scroll
+        // Solid navbar once the hero has scrolled away
         const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 50);
         window.addEventListener('scroll', onScroll, { passive: true });
         onScroll();
-
-        // Scroll reveal animation
-        const revealObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    revealObserver.unobserve(entry.target);
-                }
-            });
-        }, { rootMargin: '0px 0px -100px 0px' });
-        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
     </script>
 </body>
 </html>
