@@ -624,7 +624,7 @@ img {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.contact-item h4 {
+.contact-item h3 {
     color: var(--color-text-muted);
     margin-bottom: 0.25rem;
     font-size: 0.75rem;
@@ -750,6 +750,10 @@ img {
         opacity: 1;
         transform: none;
         transition: none;
+    }
+
+    .hero-logo {
+        animation: none;
     }
 }
 
