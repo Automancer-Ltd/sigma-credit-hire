@@ -70,6 +70,7 @@
 
 html {
     scroll-behavior: smooth;
+    scroll-padding-top: 86px;
 }
 
 body {
@@ -303,6 +304,7 @@ img {
     position: absolute;
     inset: 0;
     background-image: url('images/hero-car-2.jpg');
+    background-image: image-set(url('images/hero-car-2-1920.webp') type('image/webp'), url('images/hero-car-2.jpg') type('image/jpeg'));
     background-size: cover;
     background-position: center;
     filter: brightness(0.3);
@@ -729,6 +731,18 @@ img {
     transform: translateY(0);
 }
 
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+}
+
 /* ==========================================================================
    Responsive Design
    ========================================================================== */
@@ -747,6 +761,10 @@ img {
     .hero {
         min-height: auto;
         padding: 140px 0 var(--spacing-xl);
+    }
+
+    .hero::before {
+        background-image: image-set(url('images/hero-car-2-800.webp') type('image/webp'), url('images/hero-car-2.jpg') type('image/jpeg'));
     }
     
     .nav-toggle {
