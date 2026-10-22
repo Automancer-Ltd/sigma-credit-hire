@@ -741,6 +741,14 @@ img {
     transform: translateY(0);
 }
 
+/* Without JavaScript nothing adds .visible, so show the content. */
+@media (scripting: none) {
+    .reveal {
+        opacity: 1;
+        transform: none;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     html {
         scroll-behavior: auto;
