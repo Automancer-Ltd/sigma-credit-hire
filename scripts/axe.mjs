@@ -1,12 +1,14 @@
-// Serve the site from this checkout and fail on WCAG 2.2 A/AA violations
-// (axe-core) at desktop and phone widths. Usage: node check.mjs <site-root>
+// Fail on WCAG 2.2 A/AA violations (axe-core) at desktop and phone widths.
+// Usage: node axe.mjs <site-root | https://url>. A directory is served from here; a URL is read as is.
 import AxeBuilder from "@axe-core/playwright";
 import { createServer } from "node:http";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { chromium } from "playwright";
 
-const root = path.resolve(process.argv[2]);
+const target = process.argv[2];
+const live = /^https?:\/\//.test(target);
+const root = live ? "" : path.resolve(target);
 const disabled = (process.env.A11Y_DISABLE_RULES ?? "").split(",").filter(Boolean);
 const types = { ".html": "text/html", ".css": "text/css", ".js": "text/javascript", ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".webp": "image/webp", ".woff2": "font/woff2" };
 const server = createServer(async (req, res) => {
@@ -20,7 +22,7 @@ const server = createServer(async (req, res) => {
   }
 });
 await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
-const url = `http://127.0.0.1:${server.address().port}/`;
+const url = live ? target : `http://127.0.0.1:${server.address().port}/`;
 const browser = await chromium.launch();
 let failed = 0;
 for (const viewport of [{ width: 1280, height: 900 }, { width: 320, height: 640 }]) {
