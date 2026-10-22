@@ -10,7 +10,7 @@ no forms.
 - `revision.json`: Jekyll writes the served commit into it (`{"revision": "<sha>"}`). `deploy.json` tells
   Guardian's served-vs-main check to read it.
 - `_config.yml` keeps `AGENTS.md`, `README.md` and `scripts/` off the public site.
-- Draft PRs #5 (design pass) and #9 (contrast fix) are Waseem's to decide; do not merge or rebase them.
+- Draft PRs #5 (design pass) and #9 (contrast fix) are Waseem's to decide; do not merge them unasked. Whoever lands #9 or #5 drops the `color-contrast` default in `scripts/check`.
 
 ## Commands
 
