@@ -27,6 +27,6 @@ Merging to `main` is the release: Pages builds and serves it. Verify with `scrip
 
 ## Observability
 
-- Uptime: `obs uptime sigma` (UptimeRobot monitor 804357869 on `/revision.json`, 5 minutes).
+- Uptime: `obs uptime | grep -i sigma` (UptimeRobot monitor 804357869 on `/revision.json`, 5 minutes).
 - Errors: none. The page runs no application code of its own, so there is nothing to report.
 - Served version: `curl -fsS https://sigmacredithire.co.uk/revision.json`.
