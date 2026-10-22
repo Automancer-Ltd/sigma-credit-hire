@@ -625,7 +625,7 @@ img {
 }
 
 .contact-item h3 {
-    color: var(--color-text-muted);
+    color: var(--color-text-light);
     margin-bottom: 0.25rem;
     font-size: 0.75rem;
     text-transform: uppercase;
