@@ -10,13 +10,8 @@
 *.swo
 *~
 
-# Node modules (if using npm tools)
+# Keep tooling installs out of the published site
 node_modules/
-
-# Build output
-dist/
-build/
-.DS_Store
 
 # Internal project notes
 README.md
