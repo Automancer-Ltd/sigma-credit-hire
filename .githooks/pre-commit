@@ -1,22 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
-# Estate secret-scanning pre-commit -- THE CANONICAL COPY.
-#
-# Source of truth: automancer-ops hooks/pre-commit. Every other checkout on the
-# box runs a copy of this file at <repo>/.githooks/pre-commit; keep them in step
-# with scripts/sync-estate-hooks.sh (--check reports drift, --install <repo>
-# writes this file into a checkout, so a repo PR is one command).
-#
-# DELIBERATELY LIVE -- do not turn this off, and do not "fix" it back to a
-# warning. A live credential was committed and pushed in this estate on
-# 2026-08-25.
-#
-# If this hook blocks a commit, there is probably a secret in it. Deal with the
-# secret, not with the hook. If it blocks an ordinary source file, the FILENAME
-# rule is at fault -- narrow that name here, once, in this file (t4883: the
-# gdp-ui kit's styles/tokens.css was blocked by a `.*token.*` arm and had to be
-# exempted in every repo that adopted the kit). Never add a per-repo exemption
-# line: fix the rule at this source and roll it out.
+# Secret-scanning pre-commit hook.
+# Blocks sensitive filenames and scans staged content for secrets.
+# Fix a finding before committing; a failed scan is not a clean scan.
 red='\033[0;31m'; green='\033[0;32m'; nc='\033[0m'
 
 # Filename rule: credential-SHAPED names only. A guard that cries wolf gets
@@ -28,9 +14,9 @@ red='\033[0;31m'; green='\033[0;32m'; nc='\033[0m'
 #   *.pem *.key *.p12 *.pfx id_rsa, *credentials.json   keys and service accounts
 #   .openclaw/, memory/, MEMORY.md, USER.md, openclaw.json   agent state
 # It deliberately does NOT block every path containing "token", "secret" or
-# "credential": that blocked api_tokens.py, [token]/route.ts and the kit's
-# design tokens (src/gdp-ui/styles/tokens.css). Content scanning by gitleaks
-# below is the actual control; this list is only a floor for file shapes.
+# "credential": ordinary source and design data can use those words.
+# Content scanning by gitleaks below is the actual control; this list is only
+# a floor for file shapes.
 blocked_paths_regex='(^|/)(\.openclaw/|memory/|MEMORY\.md$|USER\.md$|openclaw\.json$|\.env$|\.env\..+|.*\.token$|token\.json$|ms-graph-token\.json$|msgraph-calendar-token\.json$|tokens?\.(env|txt)$|.*\.pem$|.*\.key$|.*\.p12$|.*\.pfx$|id_rsa$|.*credentials\.json$)'
 staged_files=$(git diff --cached --name-only --diff-filter=ACM || true)
 # Committed templates at any depth: .env.example, apps/x/.env.example,
