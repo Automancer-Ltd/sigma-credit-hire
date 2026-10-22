@@ -1,0 +1,2 @@
+# Jekyll builds only revision.json; keep the tooling and notes off the public site.
+exclude: [AGENTS.md, README.md, scripts]
