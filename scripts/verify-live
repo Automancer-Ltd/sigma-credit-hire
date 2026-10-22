@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# After a merge: wait for GitHub Pages to serve the commit, then drive the live page with the same
+# axe check. Exits non-zero if the commit is not live in 5 minutes or the live page fails.
+# Usage: scripts/verify-live [sha]   (default: tip of origin main)
+set -euo pipefail
+here=$(cd "$(dirname "$0")" && pwd)
+sha=${1:-$(git -C "$here" ls-remote origin refs/heads/main | cut -f1)}
+for _ in $(seq 30); do
+  live=$(curl -fsS --max-time 20 "https://sigmacredithire.co.uk/revision.json?$sha" | sed -n 's/.*"revision":"\([0-9a-f]*\)".*/\1/p' || true)
+  [ "$live" = "$sha" ] && break
+  sleep 10
+done
+[ "$live" = "$sha" ] || { echo "NOT LIVE: production serves ${live:-nothing}, wanted $sha" >&2; exit 1; }
+echo "live: $sha"
+"$here/check" https://sigmacredithire.co.uk/

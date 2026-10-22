@@ -15,9 +15,3 @@ regexes = [
   '''your-[a-z0-9-]+''',
   '''<[a-z0-9_-]+>''',
 ]
-paths = [
-
-# Triaged 2026-08-27: fake tokens in billing and synthesis tests
-  '''(^|/)tests/''',
-  '''(^|/)\.git/''',
-]
