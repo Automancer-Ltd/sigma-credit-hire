@@ -4,7 +4,11 @@
 # Usage: scripts/verify-live [sha]   (default: tip of origin main)
 set -euo pipefail
 here=$(cd "$(dirname "$0")" && pwd)
-sha=${1:-$(git -C "$here" ls-remote origin refs/heads/main | cut -f1)}
+if [ -n "${1:-}" ]; then
+  sha=$(git -C "$here" rev-parse --verify "${1}^{commit}" 2>/dev/null || printf '%s' "$1")
+else
+  sha=$(git -C "$here" ls-remote origin refs/heads/main | cut -f1)
+fi
 for _ in $(seq 30); do
   live=$(curl -fsS --max-time 20 "https://sigmacredithire.co.uk/revision.json?$sha" | sed -n 's/.*"revision":"\([0-9a-f]*\)".*/\1/p' || true)
   [ "$live" = "$sha" ] && break

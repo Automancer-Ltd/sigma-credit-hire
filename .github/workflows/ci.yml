@@ -7,6 +7,12 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 permissions:
   contents: read
+env:
+  # Bound scripts/check npm install fetch stall to ~2m total (t6474 / t6586).
+  npm_config_fetch_timeout: "20000"
+  npm_config_fetch_retries: "4"
+  npm_config_fetch_retry_mintimeout: "2000"
+  npm_config_fetch_retry_maxtimeout: "10000"
 jobs:
   check:
     runs-on: ${{ fromJSON(vars.CI_RUNNER || '"ubuntu-24.04"') }}
