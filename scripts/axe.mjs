@@ -2,7 +2,7 @@
 // Usage: node axe.mjs <site-root | https://url>. A directory is served from here; a URL is read as is.
 import AxeBuilder from "@axe-core/playwright";
 import { createServer } from "node:http";
-import { readFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { chromium } from "playwright";
 
@@ -28,7 +28,25 @@ let failed = 0;
 for (const viewport of [{ width: 1280, height: 900 }, { width: 320, height: 640 }]) {
   // Reduced motion shows scroll-reveal content at once, so axe checks it.
   const page = await (await browser.newContext({ viewport, reducedMotion: "reduce" })).newPage();
+  const problems = [];
+  page.on("pageerror", (e) => problems.push(`script error: ${e.message}`));
+  page.on("requestfailed", (r) => problems.push(`request failed: ${r.url()}`));
+  page.on("response", (r) => r.status() >= 400 && problems.push(`HTTP ${r.status()}: ${r.url()}`));
   await page.goto(url, { waitUntil: "networkidle" });
+  // Visitor journey (read-only): the page loads whole, a caller can see a phone number at once, and
+  // "Get in Touch" lands on the contact details. Failing any of these costs the business a lead.
+  const inView = (loc) => loc.evaluateAll((els) => els.some((e) => { const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0 && r.top >= 0 && r.bottom <= innerHeight; }));
+  if (!(await page.locator("h1").first().isVisible())) problems.push("headline not visible");
+  if (!(await inView(page.locator('a[href="tel:+447516211991"]')))) problems.push("no tap-to-call number visible without scrolling");
+  if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)) problems.push("page scrolls sideways");
+  if (await page.evaluate(() => [...document.images].some((i) => !i.naturalWidth))) problems.push("an image did not load");
+  const shot = await page.screenshot();
+  if (shot.length < 20000) problems.push(`screenshot looks blank (${shot.length} bytes)`);
+  if (process.env.SHOT_DIR) await writeFile(path.join(process.env.SHOT_DIR, `home-${viewport.width}.png`), shot);
+  await page.getByRole("link", { name: "Get in Touch" }).click();
+  await page.waitForTimeout(800);
+  if (!(await inView(page.locator('#contact a[href^="mailto:"]')))) problems.push("Get in Touch does not reach the contact email");
+  for (const m of problems) { failed++; console.log(`${viewport.width}px journey: ${m}`); }
   const { violations } = await new AxeBuilder({ page })
     .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
     .disableRules(disabled)
@@ -40,5 +58,5 @@ for (const viewport of [{ width: 1280, height: 900 }, { width: 320, height: 640 
 }
 await browser.close();
 server.close();
-console.log(failed ? `${failed} accessibility violation(s)` : "No WCAG A/AA violations");
+console.log(failed ? `${failed} accessibility or journey failure(s)` : "No WCAG A/AA violations or journey failures");
 process.exit(failed ? 1 : 0);

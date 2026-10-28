@@ -15,7 +15,7 @@ no forms.
 ## Commands
 
 - `scripts/check` is the one check and what CI runs: it serves the checkout and fails on WCAG 2.2 A/AA
-  violations (axe-core) at 1280 px and 320 px. Heavy (it downloads Chromium): `/opt/automancer/bin/heavy -- scripts/check`.
+  violations (axe-core) and visitor-journey failures (no phone number visible on load, sideways scroll, failed requests or images, blank screenshot, "Get in Touch" not reaching the contact email) at 1280 px and 320 px. Read-only; no staging exists, so production is checked the same way. `SHOT_DIR=<dir>` saves the screenshots. Heavy (it downloads Chromium): `/opt/automancer/bin/heavy -- scripts/check`.
 - `scripts/verify-live` runs after a merge: waits for Pages to serve the merged SHA, then runs the same check
   against production. Merge-to-live is about a minute.
 - `git config core.hooksPath .githooks` turns on the secret-scan hooks in a fresh clone.
