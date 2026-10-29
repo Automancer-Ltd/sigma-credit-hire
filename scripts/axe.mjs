@@ -90,7 +90,7 @@ for (const viewport of [{ width: 1280, height: 900 }, { width: 320, height: 640 
     const res = await page.request.get(src);
     const bytes = res.ok() ? (await res.body()).length : 0;
     if (!res.ok()) problems.push(`og:image HTTP ${res.status()}: ${src}`);
-    else if (bytes > 600 * 1024) problems.push(`og:image is ${Math.round(bytes / 1024)} KB, over WhatsApp's 600 KB limit`);
+    else if (bytes >= 600 * 1024) problems.push(`og:image is ${Math.round(bytes / 1024)} KB, at or over WhatsApp's 600 KB limit`);
     const size = await page.evaluate((s) => new Promise((ok) => { const i = new Image(); i.onload = () => ok([i.naturalWidth, i.naturalHeight]); i.onerror = () => ok([0, 0]); i.src = s; }), src);
     if (size[0] !== declared[0] || size[1] !== declared[1]) problems.push(`og:image is ${size.join("x")} but og:image:width/height say ${declared.join("x")}`);
     const ratio = size[0] / size[1];
