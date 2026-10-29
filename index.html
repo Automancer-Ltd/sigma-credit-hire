@@ -89,6 +89,11 @@
                     <span class="logo-credit">CREDIT HIRE LTD</span>
                 </span>
             </a>
+            <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <ul class="nav-links" id="nav-links">
                 <li><a href="#about">About</a></li>
                 <li><a href="#services">Services</a></li>
@@ -97,11 +102,6 @@
             <a href="tel:+447516211991" class="btn btn-primary nav-call">
                 <svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>07516 211 991
             </a>
-            <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
         </div>
     </nav>
 
@@ -232,10 +232,19 @@
 
         navToggle.addEventListener('click', () => setMenu(!navLinks.classList.contains('active')));
 
-        // Close mobile menu when clicking a link
+        // Close mobile menu when clicking a link, pressing Escape, or leaving the nav
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', () => setMenu(false));
         });
+        nav.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+                setMenu(false);
+                navToggle.focus();
+            }
+        });
+        ['focusin', 'click'].forEach(type => document.addEventListener(type, (e) => {
+            if (!nav.contains(e.target)) setMenu(false);
+        }));
 
         // Solid navbar once the hero has scrolled away
         const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 50);
