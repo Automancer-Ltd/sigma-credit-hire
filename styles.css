@@ -572,7 +572,10 @@ ul { list-style: none; }
 }
 
 @media (max-width: 768px) {
-    :root { --nav-height: 68px; }
+    :root {
+        --nav-height: 68px;
+        --call-bar-height: calc(64px + env(safe-area-inset-bottom));
+    }
 
     .nav { background: rgb(22 22 22 / 0.97); }
 
@@ -622,7 +625,9 @@ ul { list-style: none; }
 
     .service + .service { border-top: 1px solid var(--color-border); }
 
-    .footer { padding-bottom: calc(2.5rem + 64px + env(safe-area-inset-bottom)); }
+    html { scroll-padding-bottom: var(--call-bar-height); }
+
+    .footer { padding-bottom: calc(2.5rem + var(--call-bar-height)); }
 
     .call-bar {
         position: fixed;
@@ -632,7 +637,7 @@ ul { list-style: none; }
         align-items: center;
         justify-content: center;
         gap: 0.6rem;
-        height: calc(64px + env(safe-area-inset-bottom));
+        height: var(--call-bar-height);
         padding-bottom: env(safe-area-inset-bottom);
         background: var(--color-accent);
         color: #fff;
