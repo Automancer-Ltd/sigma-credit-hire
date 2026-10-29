@@ -65,6 +65,25 @@ for (const viewport of [{ width: 1280, height: 900 }, { width: 320, height: 640 
     await page.locator("#contact h2").click({ timeout: 5000 }).catch(() => problems.push("could not click the page outside the open menu"));
     if (!(await closed())) problems.push("menu stays open after a click outside the nav");
   }
+  // Keyboard focus is never even partly hidden behind the fixed nav or the phone call bar (WCAG 2.4.11); 1 px allows for sub-pixel rounding.
+  const walk = await page.context().newPage();
+  await walk.goto(url, { waitUntil: "networkidle" });
+  for (let i = 0; i < 40; i++) {
+    await walk.keyboard.press("Tab");
+    const hidden = await walk.evaluate(() => {
+      const e = document.activeElement;
+      if (!e || e === document.body) return "end";
+      const r = e.getBoundingClientRect();
+      const covered = [...document.querySelectorAll(".nav, .call-bar")].some((bar) => {
+        const b = bar.getBoundingClientRect();
+        return !bar.contains(e) && b.height > 0 && Math.min(b.bottom, r.bottom) - Math.max(b.top, r.top) > 1 && b.left < r.right && b.right > r.left;
+      });
+      return covered ? e.textContent.trim().replace(/\s+/g, " ") : null;
+    });
+    if (hidden === "end") break;
+    if (hidden) problems.push(`keyboard focus on "${hidden}" is hidden behind the fixed nav or call bar`);
+  }
+  await walk.close();
   for (const m of problems) { failed++; console.log(`${viewport.width}px journey: ${m}`); }
   const { violations } = await new AxeBuilder({ page })
     .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
