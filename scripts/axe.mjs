@@ -75,7 +75,32 @@ for (const viewport of [{ width: 1280, height: 900 }, { width: 320, height: 640 
     console.log(`${viewport.width}px ${v.id} (${v.impact}): ${v.help}\n  ${v.nodes.map((n) => n.target.join(" ")).join("\n  ")}`);
   }
 }
+// Link previews (WhatsApp, Facebook, LinkedIn, X): the og:image loads, stays under WhatsApp's 600 KB limit,
+// matches its declared size and is about 1.91:1, so large cards show it whole on the first share.
+{
+  const page = await browser.newPage();
+  await page.goto(url, { waitUntil: "domcontentloaded" });
+  const meta = (p) => page.evaluate((p) => document.querySelector(`meta[property="${p}"]`)?.content ?? null, p);
+  const ogUrl = await meta("og:image");
+  const declared = [Number(await meta("og:image:width")), Number(await meta("og:image:height"))];
+  const problems = [];
+  if (!ogUrl) problems.push("no og:image");
+  else {
+    const src = live ? ogUrl : new URL(new URL(ogUrl).pathname, url).href;
+    const res = await page.request.get(src);
+    const bytes = res.ok() ? (await res.body()).length : 0;
+    if (!res.ok()) problems.push(`og:image HTTP ${res.status()}: ${src}`);
+    else if (bytes >= 600 * 1024) problems.push(`og:image is ${Math.round(bytes / 1024)} KB, at or over WhatsApp's 600 KB limit`);
+    const size = await page.evaluate((s) => new Promise((ok) => { const i = new Image(); i.onload = () => ok([i.naturalWidth, i.naturalHeight]); i.onerror = () => ok([0, 0]); i.src = s; }), src);
+    if (size[0] !== declared[0] || size[1] !== declared[1]) problems.push(`og:image is ${size.join("x")} but og:image:width/height say ${declared.join("x")}`);
+    const ratio = size[0] / size[1];
+    if (Math.abs(ratio - 1.91) > 0.05) problems.push(`og:image is ${ratio.toFixed(2)}:1, not about 1.91:1, so previews crop it`);
+    if (!(await meta("og:image:alt"))) problems.push("og:image has no og:image:alt");
+  }
+  for (const m of problems) { failed++; console.log(`link preview: ${m}`); }
+  await page.close();
+}
 await browser.close();
 server.close();
-console.log(failed ? `${failed} accessibility or journey failure(s)` : "No WCAG A/AA violations or journey failures");
+console.log(failed ? `${failed} accessibility, journey or link preview failure(s)` : "No WCAG A/AA violations, journey or link preview failures");
 process.exit(failed ? 1 : 0);
