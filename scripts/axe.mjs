@@ -46,6 +46,25 @@ for (const viewport of [{ width: 1280, height: 900 }, { width: 320, height: 640 
   await page.getByRole("link", { name: "Get in Touch" }).click();
   await page.waitForTimeout(800);
   if (!(await inView(page.locator('#contact a[href^="mailto:"]')))) problems.push("Get in Touch does not reach the contact email");
+  // Phone menu: Tab from the opened toggle enters the menu; Escape, focus moving outside the nav and a click
+  // outside it each close the menu and set aria-expanded back to false.
+  const toggle = page.locator(".nav-toggle");
+  if (await toggle.isVisible()) {
+    const closed = async () => !(await page.locator(".nav-links").isVisible()) && (await toggle.getAttribute("aria-expanded")) === "false";
+    const reopen = async () => { if (await closed()) await toggle.click(); if (await closed()) problems.push("menu button does not open the menu"); };
+    await toggle.focus();
+    await page.keyboard.press("Enter");
+    await page.keyboard.press("Tab");
+    if (!(await page.evaluate(() => document.activeElement?.closest(".nav-links")))) problems.push("Tab from the opened menu button skips the menu links");
+    await page.keyboard.press("Escape");
+    if (!(await closed()) || !(await toggle.evaluate((e) => e === document.activeElement))) problems.push("Escape does not close the menu and return to its button");
+    await reopen();
+    await page.locator('#contact a[href^="mailto:"]').focus();
+    if (!(await closed())) problems.push("menu stays open when keyboard focus leaves the nav");
+    await reopen();
+    await page.locator("#contact h2").click({ timeout: 5000 }).catch(() => problems.push("could not click the page outside the open menu"));
+    if (!(await closed())) problems.push("menu stays open after a click outside the nav");
+  }
   for (const m of problems) { failed++; console.log(`${viewport.width}px journey: ${m}`); }
   const { violations } = await new AxeBuilder({ page })
     .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
