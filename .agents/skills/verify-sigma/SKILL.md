@@ -10,7 +10,7 @@ description: >-
 The product is one page. Its one journey is a visitor loading it on a laptop and on a phone, so the check
 opens it in Chromium at 1280 px and 320 px and fails on any WCAG 2.2 A/AA violation.
 
-- Before merge: `/opt/automancer/bin/heavy -- scripts/check`. Prints one line per violation, or `No WCAG A/AA violations`.
+- Before merge: `scripts/check` (on auto-vps under `lane-run -- scripts/check`). Prints one line per violation, or `No WCAG A/AA violations`.
 - After merge: `scripts/verify-live`. Waits until `https://sigmacredithire.co.uk/revision.json` shows the merged SHA,
   then runs the same check on the live page. Exits non-zero if the SHA is not live in 5 minutes.
 
