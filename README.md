@@ -6,7 +6,7 @@ The site is a static, one-page GitHub Pages site at <https://sigmacredithire.co.
 
 1. Make and review the change on a branch and open a pull request. Do not edit `main` directly.
 2. Require the repository's CI check (`scripts/check`) to pass. It checks WCAG 2.2 A/AA at desktop (1280 px) and mobile (320 px).
-3. For local verification, run `/opt/automancer/bin/heavy -- scripts/check` (or `scripts/check` where Chromium is available).
+3. For local verification, run `scripts/check` (on auto-vps, `lane-run -- scripts/check`).
 4. Merge the approved PR to `main`. GitHub Pages normally serves the new revision in about a minute.
 
 ## Verify production
